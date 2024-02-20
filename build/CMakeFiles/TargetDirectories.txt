@@ -1,0 +1,3 @@
+C:/meee/coding/gauss/build/CMakeFiles/gauss.dir
+C:/meee/coding/gauss/build/CMakeFiles/edit_cache.dir
+C:/meee/coding/gauss/build/CMakeFiles/rebuild_cache.dir

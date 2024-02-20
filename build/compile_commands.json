@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/meee/coding/gauss/build",
+  "command": "C:\\msys64\\mingw32\\bin\\g++.exe  -std=c++17 -g -o CMakeFiles\\gauss.dir\\main.cpp.obj -c C:\\meee\\coding\\gauss\\main.cpp",
+  "file": "C:\\meee\\coding\\gauss\\main.cpp",
+  "output": "CMakeFiles\\gauss.dir\\main.cpp.obj"
+}
+]

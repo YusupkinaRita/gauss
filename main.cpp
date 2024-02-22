@@ -3,10 +3,27 @@
 #include <cstdlib>
 #include <ctime>
 
+
+void manual_fill(double** matrix, int size){
+    for (int i=0;i<size;i++){
+        for(int j=0;j<size; j++){
+            std::cout<<"cell "<<i<<"_"<<j<<std::endl;
+            std::cin>>matrix[i][j];
+        }
+    }
+}
+void vector_fill(double** matrix, int size){
+    for (int i=0;i<size;i++){
+            std::cout<<"vector cell "<<i<<std::endl;
+            std::cin>>matrix[i][size];
+        
+    }
+}
+
 void matrix_fill(double ** matrix, int size){
     for(int i=0; i<size; i++){
         for (int j=0; j< size+1; j++){
-            matrix[i][j]=static_cast<double>(-10+rand()%20);
+            matrix[i][j]=static_cast<double>(10000000+rand()%100000000);
         }
     }
 }
@@ -37,6 +54,16 @@ void col_swap(double** matrix, int size, int s){
     }
 }
 
+void matrix_multiply(double** matrix, double* solution, double* check, int size){
+    for(int i=0; i<size;i++){
+        for( int j=0; j<size;j++){
+            check[i]+=matrix[i][j]*solution[j];
+
+        }
+
+    }
+}
+
 
 void gauss(double** matrix, int size){
     double r=0;
@@ -61,6 +88,13 @@ void gauss(double** matrix, int size){
     }
 }
 
+void approx_find(double** matrix, double* check, double* approx, int size){
+    for (int i=0; i<size; i++){
+        approx[i]=matrix[i][size]-check[i];
+
+    }
+}
+
 
 int main(){
 srand ( time(NULL) );
@@ -69,13 +103,24 @@ std::cout << "Enter matrix size ";
 std::cin >> size;
 
 double* solution= new double[size];
+double* check= new double[size];
+double* approx= new double[size];
 
 double** matrix = new double*[size];
 for (int i = 0; i < size; i++){
     matrix[i] = new double[size+1];
 }
 
+int id=0;
+std::cout<<"0 if random, 1 if manual ";
+std::cin>>id;
+if(id==0)
 matrix_fill(matrix, size);
+else{
+manual_fill(matrix, size);
+vector_fill(matrix, size);
+}
+
 print_matrix(matrix, size);
 std::cout<<' '<<std::endl;
 gauss(matrix, size);
@@ -90,6 +135,22 @@ for (int i=size-1;i>=0;i--){
 for (int i=0; i<size;i++){
     std::cout<<solution[i]<<std::endl;
 }
+
+matrix_multiply(matrix, solution, check, size);
+std::cout<<" "<<std::endl;
+approx_find(matrix, check, approx,size);
+std::cout<<"checking: "<<std::endl;
+for (int i=0; i<size;i++){
+    std::cout<<approx[i]<<std::endl;
+}
+
+for(int i=0;i<size;i++){
+    delete(matrix[i]);
+}
+delete(matrix);
+delete(check);
+delete(approx);
+
 
 return 0;
 

@@ -23,7 +23,7 @@ void vector_fill(double** matrix, int size){
 void matrix_fill(double ** matrix, int size){
     for(int i=0; i<size; i++){
         for (int j=0; j< size+1; j++){
-            matrix[i][j]=static_cast<double>(10000000+rand()%100000000);
+            matrix[i][j]=static_cast<double>(-10+rand()%10);
         }
     }
 }
@@ -40,14 +40,15 @@ void print_matrix(double** matrix, int size){
     }
 }
 
-void col_swap(double** matrix, int size, int s){
+
+void row_swap(double** matrix, int size, int s){
     int temp=0;
-    for(int j=s+1;j<size;j++){
-        if(matrix[s][j]!=0){
-            for(int i=0;i<size;i++){
-                temp=matrix[i][s];
-                matrix[i][s]=matrix[i][j];
-                matrix[i][j]=temp;
+    for(int i=s+1;i<size;i++){
+        if(matrix[i][s]!=0){
+            for(int j=0;j<size+1;j++){
+                temp=matrix[i][j];
+                matrix[i][j]=matrix[s][j];
+                matrix[s][j]=temp;
             }
         break;
         }
@@ -70,7 +71,7 @@ void gauss(double** matrix, int size){
     for( int i=0; i<size; i++){
         r=matrix[i][i];
         if(r==0)
-            col_swap(matrix, size,i);
+            row_swap(matrix, size,i);
         
         r=matrix[i][i];
         for (int j=0; j<size+1;j++){
@@ -95,16 +96,29 @@ void approx_find(double** matrix, double* check, double* approx, int size){
     }
 }
 
+double det_find2(double**matrix){
+    double d;
+    d=matrix[0][0]*matrix[1][1]-matrix[0][1]*matrix[1][0];
+    return d;
+}
+
+double det_find3(double**matrix){
+    double d;
+    d=matrix[0][0]*matrix[1][1]*matrix[2][2]+matrix[0][1]*matrix[1][2]*matrix[2][0]+matrix[0][2]*matrix[1][0]*matrix[2][1];
+    d= d-matrix[0][2]*matrix[1][1]*matrix[2][0]-matrix[0][1]*matrix[1][0]*matrix[2][2]-matrix[0][0]*matrix[1][2]*matrix[2][1];
+    
+    return d;
+}
+
 
 int main(){
+double d;
 srand ( time(NULL) );
 int size=0;
 std::cout << "Enter matrix size ";
 std::cin >> size;
 
-double* solution= new double[size];
-double* check= new double[size];
-double* approx= new double[size];
+
 
 double** matrix = new double*[size];
 for (int i = 0; i < size; i++){
@@ -123,6 +137,20 @@ vector_fill(matrix, size);
 
 print_matrix(matrix, size);
 std::cout<<' '<<std::endl;
+if (size==2)
+d=det_find2(matrix);
+if (size==3)
+d=det_find3(matrix);
+
+if(d==0.0){
+std::cout<<"more than one solution"<<std::endl;
+std::cout<<" "<<std::endl;
+}
+else{
+double* solution= new double[size];
+double* check= new double[size];
+double* approx= new double[size];
+
 gauss(matrix, size);
 std::cout<<"the solution = "<<std::endl;
 for (int i=size-1;i>=0;i--){
@@ -144,12 +172,16 @@ for (int i=0; i<size;i++){
     std::cout<<approx[i]<<std::endl;
 }
 
+delete(check);
+delete(approx);
+
+}
+
 for(int i=0;i<size;i++){
     delete(matrix[i]);
 }
 delete(matrix);
-delete(check);
-delete(approx);
+
 
 
 return 0;
